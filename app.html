@@ -522,73 +522,173 @@
             justify-content: center;
             align-items: center;
             gap: 30px;
+            position: relative;
         }
 
         .deck-pile {
             position: relative;
             cursor: pointer;
             transition: transform 0.3s;
+            perspective: 1000px;
         }
 
         .deck-pile:hover {
-            transform: scale(1.05);
+            transform: scale(1.05) rotateY(5deg);
+        }
+
+        /* ===== CARD STYLES ===== */
+        .card {
+            width: clamp(60px, 15vw, 100px);
+            height: clamp(90px, 22vw, 150px);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .card-corner {
+            position: absolute;
+            font-size: clamp(0.6rem, 1.5vw, 0.9rem);
+            font-weight: bold;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.8;
+        }
+
+        .card-corner.top-left {
+            top: 4px;
+            left: 4px;
+        }
+
+        .card-corner.bottom-right {
+            bottom: 4px;
+            right: 4px;
+            transform: rotate(180deg);
+        }
+
+        .card-symbol {
+            font-size: clamp(2rem, 5vw, 3rem);
+            z-index: 2;
+        }
+
+        /* Card Colors */
+        .card-red {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            color: white;
+        }
+
+        .card-blue {
+            background: linear-gradient(135deg, #5e72e4 0%, #4563d8 100%);
+            color: white;
+        }
+
+        .card-green {
+            background: linear-gradient(135deg, #2dd36f 0%, #1abc9c 100%);
+            color: white;
+        }
+
+        .card-yellow {
+            background: linear-gradient(135deg, #ffd93d 0%, #ffb700 100%);
+            color: #333;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .card-wild {
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+            color: white;
+        }
+
+        .card-wild-draw {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
         }
 
         .deck-card {
-            width: clamp(60px, 15vw, 90px);
-            height: clamp(90px, 22vw, 130px);
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: clamp(1.5rem, 4vw, 2.5rem);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-            border: 2px solid rgba(255,255,255,0.1);
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .deck-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.05) 10px, rgba(255,255,255,0.05) 20px);
+            pointer-events: none;
         }
 
         .deck-count {
             position: absolute;
-            bottom: -10px;
-            right: -10px;
-            background: var(--red);
+            bottom: -12px;
+            right: -12px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
             color: white;
-            width: 30px;
-            height: 30px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+        }
+
+        .discard-pile {
+            position: relative;
         }
 
         .current-card {
-            width: clamp(60px, 15vw, 90px);
-            height: clamp(90px, 22vw, 130px);
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-size: clamp(1.5rem, 4vw, 2.5rem);
-            font-weight: bold;
-            color: white;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-            transition: var(--transition);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: cardFlip 0.4s ease;
         }
 
-        .card-red { background: linear-gradient(135deg, #ff5555, #cc4444); }
-        .card-blue { background: linear-gradient(135deg, #5555ff, #4444cc); }
-        .card-green { background: linear-gradient(135deg, #55aa55, #448844); }
-        .card-yellow { background: linear-gradient(135deg, #ffaa00, #cc8800); }
-        .card-wild { background: linear-gradient(135deg, #1a1a2e, #333); border: 2px solid var(--yellow); }
+        @keyframes cardFlip {
+            0% {
+                transform: rotateY(-90deg);
+                opacity: 0;
+            }
+            50% {
+                transform: rotateY(0deg);
+            }
+            100% {
+                transform: rotateY(0deg);
+                opacity: 1;
+            }
+        }
 
         /* Player Area */
         .player-area {
             flex: 0 0 auto;
-            padding: 10px;
-            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            background: rgba(0,0,0,0.4);
+            border-top: 2px solid rgba(255,255,255,0.1);
         }
 
         .player-info {
@@ -596,12 +696,13 @@
             justify-content: space-between;
             align-items: center;
             padding: 5px 15px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .player-name {
             color: white;
             font-weight: bold;
+            font-size: 1.1rem;
         }
 
         .uno-btn {
@@ -624,6 +725,7 @@
         .uno-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+            animation: none;
         }
 
         @keyframes unoGlow {
@@ -637,34 +739,56 @@
             gap: 8px;
             flex-wrap: nowrap;
             overflow-x: auto;
-            padding: 10px;
+            padding: 10px 0;
             scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.3) transparent;
+        }
+
+        .player-hand::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .player-hand::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .player-hand::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
         }
 
         .hand-card {
-            width: clamp(50px, 12vw, 70px);
-            height: clamp(75px, 18vw, 100px);
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-size: clamp(1rem, 3vw, 1.5rem);
-            font-weight: bold;
-            color: white;
             cursor: pointer;
-            transition: var(--transition);
-            border: 2px solid transparent;
-            flex-shrink: 0;
+            animation: cardEntrance 0.4s ease;
+        }
+
+        @keyframes cardEntrance {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         .hand-card:hover {
+            transform: translateY(-15px) scale(1.08) rotateZ(-2deg);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.5);
+        }
+
+        .hand-card:active {
             transform: translateY(-10px) scale(1.05);
         }
 
-        .hand-card.selected {
-            border-color: white;
-            box-shadow: 0 0 15px rgba(255,255,255,0.5);
+        .hand-card.valid:hover {
+            filter: drop-shadow(0 0 10px rgba(100,200,100,0.6));
+        }
+
+        .hand-card.invalid:hover {
+            filter: drop-shadow(0 0 10px rgba(200,100,100,0.6));
+            cursor: not-allowed;
         }
 
         /* ===== MODAL ===== */
@@ -692,6 +816,7 @@
             max-width: 500px;
             width: 90%;
             animation: modalSlide 0.3s ease;
+            border: 2px solid rgba(255,255,255,0.1);
         }
 
         @keyframes modalSlide {
@@ -737,6 +862,25 @@
             color: white;
         }
 
+        /* ===== FLOATING TEXT ===== */
+        .floating-text {
+            position: fixed;
+            pointer-events: none;
+            font-weight: bold;
+            animation: floatUp 1s ease-out forwards;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.8);
+            }
+        }
+
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .opponents-area {
@@ -771,6 +915,19 @@
             .modal-content {
                 padding: 20px;
             }
+
+            .card {
+                width: clamp(50px, 10vw, 70px);
+                height: clamp(75px, 15vw, 100px);
+            }
+        }
+
+        .menu-footer {
+            margin-top: auto;
+            padding: 20px;
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            font-size: clamp(0.7rem, 1.5vw, 0.9rem);
         }
     </style>
 </head>
@@ -794,7 +951,7 @@
                 <button class="menu-btn btn-settings" onclick="showPanel('settingsPanel')">⚙️ Configurações</button>
             </div>
             <div class="menu-footer">
-                <p>🎴 UNO Ultimate - Versão 2.0</p>
+                <p>🎴 UNO Ultimate - Versão 2.1</p>
                 <p>Divirta-se jogando!</p>
             </div>
         </div>
@@ -882,7 +1039,9 @@
             <!-- Play Area -->
             <div class="play-area">
                 <div class="deck-pile" onclick="drawCard()">
-                    <div class="deck-card">🂠</div>
+                    <div class="card deck-card">
+                        <div class="card-symbol">🂠</div>
+                    </div>
                     <div class="deck-count" id="deckCount">0</div>
                 </div>
                 <div id="discardPile"></div>
@@ -909,6 +1068,14 @@
     </div>
 
     <script>
+        // ===== CARD CONFIGURATION =====
+        const CARD_SYMBOLS = {
+            '0': '0', '1': '1', '2': '2', '3': '3', '4': '4',
+            '5': '5', '6': '6', '7': '7', '8': '8', '9': '9',
+            'skip': '⊘', 'reverse': '↻', 'draw': '+2',
+            'wild': 'W', 'draw4': '+4'
+        };
+
         // ===== GAME STATE =====
         const gameState = {
             currentScreen: 'menu',
@@ -919,6 +1086,8 @@
             discardPile: [],
             gameActive: false,
             roomCode: null,
+            selectedCard: null,
+            validPlayedCard: false,
             settings: {
                 sound: true,
                 music: true,
@@ -926,12 +1095,47 @@
             }
         };
 
+        // ===== SOUND EFFECTS =====
+        function playSound(type) {
+            if (!gameState.settings.sound) return;
+            
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+            
+            switch(type) {
+                case 'play':
+                    oscillator.frequency.value = 523.25;
+                    break;
+                case 'draw':
+                    oscillator.frequency.value = 392;
+                    break;
+                case 'invalid':
+                    oscillator.frequency.value = 262;
+                    break;
+                case 'uno':
+                    oscillator.frequency.value = 659;
+                    break;
+                case 'win':
+                    oscillator.frequency.value = 784;
+                    break;
+            }
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.1);
+        }
+
         // ===== INITIALIZATION =====
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('loadingScreen').classList.add('hidden');
             }, 1500);
-
             loadSettings();
         });
 
@@ -968,7 +1172,6 @@
             document.getElementById('roomCodeDisplay').style.display = 'block';
             updatePlayersList();
             
-            // Simula adição de jogadores
             setTimeout(() => {
                 gameState.players.push({ id: 2, name: 'Jogador 2', avatar: '🤖', cards: 7, status: 'online' });
                 updatePlayersList();
@@ -1027,8 +1230,8 @@
             
             if (mode === 'single') {
                 gameState.players = [
-                    { id: 1, name: 'Você', avatar: '👤', cards: 7 },
-                    { id: 2, name: 'IA', avatar: '🤖', cards: 7 },
+                    { id: 1, name: 'Você', avatar: '👤', hand: [] },
+                    { id: 2, name: 'IA', avatar: '🤖', hand: [] },
                 ];
             }
 
@@ -1040,7 +1243,6 @@
             gameState.deck = generateDeck();
             gameState.discardPile = [];
             
-            // Distribui 7 cartas para cada jogador
             gameState.players.forEach(player => {
                 player.hand = [];
                 for (let i = 0; i < 7; i++) {
@@ -1050,6 +1252,7 @@
 
             gameState.discardPile.push(drawFromDeck());
             gameState.currentPlayerIndex = 0;
+            gameState.selectedCard = null;
             
             renderGame();
         }
@@ -1081,6 +1284,17 @@
                 gameState.discardPile = [gameState.discardPile[gameState.discardPile.length - 1]];
             }
             return gameState.deck.pop();
+        }
+
+        // ===== CARD VALIDATION =====
+        function canPlayCard(card) {
+            const topCard = gameState.discardPile[gameState.discardPile.length - 1];
+            
+            if (card.color === 'wild') return true;
+            if (card.color === topCard.color) return true;
+            if (card.value === topCard.value) return true;
+            
+            return false;
         }
 
         // ===== GAME RENDERING =====
@@ -1118,9 +1332,7 @@
 
         function renderDiscardPile() {
             const currentCard = gameState.discardPile[gameState.discardPile.length - 1];
-            const div = document.createElement('div');
-            div.className = `current-card card-${currentCard.color}`;
-            div.innerHTML = getCardDisplay(currentCard);
+            const div = renderCard(currentCard, 'current-card');
             document.getElementById('discardPile').innerHTML = '';
             document.getElementById('discardPile').appendChild(div);
         }
@@ -1131,21 +1343,175 @@
             div.innerHTML = '';
 
             hand.forEach((card, index) => {
-                const card_div = document.createElement('div');
-                card_div.className = `hand-card card-${card.color}`;
-                card_div.innerHTML = getCardDisplay(card);
-                card_div.onclick = () => playCard(index);
-                div.appendChild(card_div);
+                const cardDiv = renderCard(card, 'hand-card');
+                const isValid = canPlayCard(card);
+                
+                if (isValid) {
+                    cardDiv.classList.add('valid');
+                } else {
+                    cardDiv.classList.add('invalid');
+                }
+                
+                cardDiv.onclick = () => selectCard(index, isValid);
+                div.appendChild(cardDiv);
             });
         }
 
-        function getCardDisplay(card) {
-            if (card.value === 'draw') return '📥';
-            if (card.value === 'skip') return '⏭️';
-            if (card.value === 'reverse') return '🔄';
-            if (card.value === 'wild') return '🌈';
-            if (card.value === 'draw4') return '+4';
-            return card.value;
+        function renderCard(card, className = '') {
+            const div = document.createElement('div');
+            div.className = `card card-${card.color} ${className}`;
+            
+            const symbol = CARD_SYMBOLS[card.value] || card.value;
+            
+            div.innerHTML = `
+                <div class="card-corner top-left">${card.value[0]?.toUpperCase() || symbol}</div>
+                <div class="card-symbol">${symbol}</div>
+                <div class="card-corner bottom-right">${card.value[0]?.toUpperCase() || symbol}</div>
+            `;
+            
+            return div;
+        }
+
+        function selectCard(index, isValid) {
+            if (!gameState.gameActive || gameState.currentPlayerIndex !== 0) return;
+            
+            if (!isValid) {
+                playSound('invalid');
+                showFloatingText('Carta inválida!', event.clientX, event.clientY, '#ff6b6b');
+                return;
+            }
+
+            gameState.selectedCard = index;
+            updateCardSelection();
+        }
+
+        function updateCardSelection() {
+            const cards = document.querySelectorAll('.hand-card');
+            cards.forEach((card, index) => {
+                if (index === gameState.selectedCard) {
+                    card.style.transform = 'translateY(-20px) scale(1.1)';
+                    card.style.filter = 'drop-shadow(0 0 15px rgba(100,200,100,0.8))';
+                } else {
+                    card.style.transform = '';
+                    card.style.filter = '';
+                }
+            });
+        }
+
+        function playSelectedCard() {
+            if (gameState.selectedCard === null) return;
+            
+            playCard(gameState.selectedCard);
+            gameState.selectedCard = null;
+        }
+
+        // ===== GAME MECHANICS =====
+        function drawCard() {
+            if (gameState.currentPlayerIndex === 0 && gameState.gameActive) {
+                playSound('draw');
+                gameState.players[0].hand.push(drawFromDeck());
+                renderPlayerHand();
+                nextTurn();
+                renderGame();
+            }
+        }
+
+        function playCard(index) {
+            if (gameState.currentPlayerIndex !== 0 || !gameState.gameActive) return;
+            
+            const card = gameState.players[0].hand[index];
+            
+            if (!canPlayCard(card)) {
+                playSound('invalid');
+                showFloatingText('Não pode jogar!', window.innerWidth / 2, window.innerHeight / 2, '#ff6b6b');
+                return;
+            }
+
+            playSound('play');
+            gameState.discardPile.push(card);
+            gameState.players[0].hand.splice(index, 1);
+
+            if (gameState.players[0].hand.length === 0) {
+                playSound('win');
+                showModal('🎉 Você Venceu!', 'Parabéns! Você venceu a partida!', [
+                    { text: 'Novo Jogo', class: 'btn-confirm', action: () => {
+                        closeModal();
+                        backToMenu();
+                    }}
+                ]);
+                gameState.gameActive = false;
+                return;
+            } else if (gameState.players[0].hand.length === 1) {
+                document.getElementById('unoBtn').disabled = false;
+            } else {
+                document.getElementById('unoBtn').disabled = true;
+            }
+
+            renderPlayerHand();
+            nextTurn();
+            renderGame();
+        }
+
+        function callUno() {
+            playSound('uno');
+            showFloatingText('🎴 UNO!', window.innerWidth / 2, window.innerHeight / 2, '#ffaa00');
+            document.getElementById('unoBtn').disabled = true;
+        }
+
+        function nextTurn() {
+            gameState.currentPlayerIndex = (gameState.currentPlayerIndex + 1) % gameState.players.length;
+            
+            if (gameState.currentPlayerIndex !== 0 && gameState.gameMode === 'single') {
+                setTimeout(() => {
+                    if (gameState.gameActive) {
+                        aiTurn();
+                    }
+                }, 1500);
+            }
+        }
+
+        function aiTurn() {
+            const aiPlayer = gameState.players[gameState.currentPlayerIndex];
+            const validCards = aiPlayer.hand.filter(card => canPlayCard(card));
+            
+            if (validCards.length > 0) {
+                const randomCard = validCards[Math.floor(Math.random() * validCards.length)];
+                const cardIndex = aiPlayer.hand.indexOf(randomCard);
+                const card = aiPlayer.hand[cardIndex];
+                
+                gameState.discardPile.push(card);
+                aiPlayer.hand.splice(cardIndex, 1);
+                
+                if (aiPlayer.hand.length === 0) {
+                    showModal('💔 Você Perdeu!', 'A IA venceu! Tente novamente!', [
+                        { text: 'Novo Jogo', class: 'btn-confirm', action: () => {
+                            closeModal();
+                            backToMenu();
+                        }}
+                    ]);
+                    gameState.gameActive = false;
+                    return;
+                }
+            } else {
+                aiPlayer.hand.push(drawFromDeck());
+            }
+            
+            nextTurn();
+            renderGame();
+        }
+
+        function showFloatingText(text, x, y, color = '#fff') {
+            const span = document.createElement('div');
+            span.className = 'floating-text';
+            span.textContent = text;
+            span.style.left = x + 'px';
+            span.style.top = y + 'px';
+            span.style.color = color;
+            span.style.fontSize = '1.5rem';
+            span.style.fontWeight = 'bold';
+            document.body.appendChild(span);
+            
+            setTimeout(() => span.remove(), 1000);
         }
 
         function updateTurnIndicator() {
@@ -1163,83 +1529,6 @@
 
         function updateDeckCount() {
             document.getElementById('deckCount').textContent = gameState.deck.length;
-        }
-
-        // ===== GAME MECHANICS =====
-        function drawCard() {
-            if (gameState.currentPlayerIndex === 0) {
-                gameState.players[0].hand.push(drawFromDeck());
-                nextTurn();
-                renderGame();
-            }
-        }
-
-        function playCard(index) {
-            if (gameState.currentPlayerIndex === 0) {
-                const card = gameState.players[0].hand[index];
-                gameState.discardPile.push(card);
-                gameState.players[0].hand.splice(index, 1);
-
-                if (gameState.players[0].hand.length === 0) {
-                    showModal('🎉 Você Venceu!', 'Parabéns! Você venceu a partida!', [
-                        { text: 'Novo Jogo', class: 'btn-confirm', action: () => {
-                            closeModal();
-                            backToMenu();
-                        }}
-                    ]);
-                    gameState.gameActive = false;
-                } else if (gameState.players[0].hand.length === 1) {
-                    document.getElementById('unoBtn').disabled = false;
-                } else {
-                    document.getElementById('unoBtn').disabled = true;
-                }
-
-                nextTurn();
-                renderGame();
-            }
-        }
-
-        function callUno() {
-            document.getElementById('unoBtn').disabled = true;
-            showModal('🎴 UNO!', 'Você gritou UNO!', [
-                { text: 'OK', class: 'btn-confirm', action: closeModal }
-            ]);
-        }
-
-        function nextTurn() {
-            gameState.currentPlayerIndex = (gameState.currentPlayerIndex + 1) % gameState.players.length;
-            
-            if (gameState.currentPlayerIndex !== 0 && gameState.gameMode === 'single') {
-                setTimeout(() => {
-                    if (gameState.gameActive) {
-                        aiTurn();
-                    }
-                }, 1500);
-            }
-        }
-
-        function aiTurn() {
-            const aiPlayer = gameState.players[gameState.currentPlayerIndex];
-            if (aiPlayer.hand.length > 0) {
-                const cardIndex = Math.floor(Math.random() * aiPlayer.hand.length);
-                const card = aiPlayer.hand[cardIndex];
-                gameState.discardPile.push(card);
-                aiPlayer.hand.splice(cardIndex, 1);
-                
-                if (aiPlayer.hand.length === 0) {
-                    showModal('💔 Você Perdeu!', 'A IA venceu! Tente novamente!', [
-                        { text: 'Novo Jogo', class: 'btn-confirm', action: () => {
-                            closeModal();
-                            backToMenu();
-                        }}
-                    ]);
-                    gameState.gameActive = false;
-                    return;
-                }
-            }
-            
-            nextTurn();
-            renderGame();
         }
 
         // ===== MODAL =====
@@ -1297,6 +1586,15 @@
                 }}
             ]);
         }
+
+        // ===== KEYBOARD SUPPORT =====
+        document.addEventListener('keydown', (e) => {
+            if (gameState.currentPlayerIndex === 0 && gameState.gameActive) {
+                if (e.key === 'Enter') playSelectedCard();
+                if (e.key === ' ') drawCard();
+                if (e.key === 'u') callUno();
+            }
+        });
     </script>
 </body>
 </html>
